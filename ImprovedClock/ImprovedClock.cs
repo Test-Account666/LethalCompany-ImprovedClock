@@ -79,6 +79,8 @@ public class ImprovedClock : BaseUnityPlugin {
     }
 
     public static void SetClockColor() {
+        if (HUDManager.Instance == null) return;
+
         var color = new Color(ConfigManager.clockColorRed.Value, ConfigManager.clockColorGreen.Value, ConfigManager.clockColorBlue.Value, 1F);
 
         var clockNumber = HUDManager.Instance.clockNumber;
