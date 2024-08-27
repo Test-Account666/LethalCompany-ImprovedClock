@@ -100,4 +100,15 @@ public static class HUDManagerPatch {
 
         return playerControllerB.isInHangarShipRoom? ConfigManager.clockVisibilityInShip.Value : 1F;
     }
+
+    [HarmonyPatch(nameof(HUDManager.RemoveSpectateUI))]
+    [HarmonyPostfix]
+    private static void DisableSpectatorClock() {
+        if (ImprovedClock.spectatorClock == null) {
+            ImprovedClock.Logger.LogError("Couldn't find SpectatorClock!");
+            return;
+        }
+
+        ImprovedClock.spectatorClock.SetClockVisible(false);
+    }
 }

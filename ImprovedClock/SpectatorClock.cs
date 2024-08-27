@@ -20,8 +20,6 @@ public class SpectatorClock : MonoBehaviour {
         SetClockVisibility();
     }
 
-    private void OnDestroy() => ImprovedClock.spectatorClock = null;
-
     public void SetClockVisibility() => canvasGroup.alpha = ConfigManager.clockVisibilityInSpectator.Value;
 
     public void SetClock() {
@@ -29,5 +27,14 @@ public class SpectatorClock : MonoBehaviour {
         clockIcon.sprite = HUDManager.Instance.clockIcon.sprite;
     }
 
-    public void SetClockVisible(bool visible) => canvasGroup.enabled = visible;
+    public void SetClockVisible(bool visible) {
+        ImprovedClock.Logger.LogDebug($"Toggling SpectatorClock visibility! Visible? {visible}");
+
+        canvasGroup.alpha = visible? ConfigManager.clockVisibilityInSpectator.Value : 0F;
+        canvasGroup.enabled = visible;
+
+        clockNumber.enabled = visible;
+        clockIcon.enabled = visible;
+        clockBox.enabled = visible;
+    }
 }

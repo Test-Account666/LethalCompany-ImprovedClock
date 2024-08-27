@@ -3,7 +3,7 @@ using HarmonyLib;
 namespace ImprovedClock.Patches;
 
 [HarmonyPatch(typeof(TimeOfDay))]
-public class TimeOfDayPatch {
+public static class TimeOfDayPatch {
     [HarmonyPatch(nameof(TimeOfDay.MoveTimeOfDay))]
     [HarmonyPrefix]
     private static void SetHudTimeRefresh() {
