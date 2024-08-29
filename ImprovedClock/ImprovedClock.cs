@@ -47,9 +47,23 @@ public class ImprovedClock : BaseUnityPlugin {
         Patch();
 
 
-        ConfigManager.clockColorRed.SettingChanged += (_, _) => SetClockColor();
-        ConfigManager.clockColorGreen.SettingChanged += (_, _) => SetClockColor();
-        ConfigManager.clockColorBlue.SettingChanged += (_, _) => SetClockColor();
+        ConfigManager.clockNumberColorRed.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockNumberColorGreen.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockNumberColorBlue.SettingChanged += (_, _) => SetClockColorAndSize();
+
+        ConfigManager.clockBoxColorRed.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockBoxColorGreen.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockBoxColorBlue.SettingChanged += (_, _) => SetClockColorAndSize();
+
+        ConfigManager.clockIconColorRed.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockIconColorGreen.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockIconColorBlue.SettingChanged += (_, _) => SetClockColorAndSize();
+
+        ConfigManager.clockShipLeaveIconColorRed.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockShipLeaveIconColorGreen.SettingChanged += (_, _) => SetClockColorAndSize();
+        ConfigManager.clockShipLeaveIconColorBlue.SettingChanged += (_, _) => SetClockColorAndSize();
+
+        ConfigManager.clockSizeMultiplier.SettingChanged += (_, _) => SetClockColorAndSize();
 
         ConfigManager.showClockInSpectator.SettingChanged += (_, _) => spectatorClock?.SetClockVisible(ConfigManager.showClockInSpectator.Value);
         ConfigManager.clockVisibilityInSpectator.SettingChanged += (_, _) => spectatorClock?.SetClockVisibility();
@@ -78,33 +92,64 @@ public class ImprovedClock : BaseUnityPlugin {
         Logger.LogDebug("Finished unpatching!");
     }
 
-    public static void SetClockColor() {
+    public static void SetClockColorAndSize() {
         if (HUDManager.Instance == null) return;
 
-        var color = new Color(ConfigManager.clockColorRed.Value, ConfigManager.clockColorGreen.Value, ConfigManager.clockColorBlue.Value, 1F);
+        const float colorMultiplier = 1F / 255F;
+
+        var clockBoxScale = new Vector3(-0.5893304F, 0.5893304F, 0.5893303F);
+
+        clockBoxScale *= (ConfigManager.clockSizeMultiplier.Value / 100F);
+
+        var numberColor = new Color(colorMultiplier * ConfigManager.clockNumberColorRed.Value,
+                                    colorMultiplier * ConfigManager.clockNumberColorGreen.Value,
+                                    colorMultiplier * ConfigManager.clockNumberColorBlue.Value, 1F);
+
+        var boxColor = new Color(colorMultiplier * ConfigManager.clockBoxColorRed.Value,
+                                 colorMultiplier * ConfigManager.clockBoxColorGreen.Value,
+                                 colorMultiplier * ConfigManager.clockBoxColorBlue.Value, 1F);
+
+        var iconColor = new Color(colorMultiplier * ConfigManager.clockIconColorRed.Value,
+                                  colorMultiplier * ConfigManager.clockIconColorGreen.Value,
+                                  colorMultiplier * ConfigManager.clockIconColorBlue.Value, 1F);
+
+        var shipLeaveIconColor = new Color(colorMultiplier * ConfigManager.clockShipLeaveIconColorRed.Value,
+                                           colorMultiplier * ConfigManager.clockShipLeaveIconColorGreen.Value,
+                                           colorMultiplier * ConfigManager.clockShipLeaveIconColorBlue.Value, 1F);
 
         var clockNumber = HUDManager.Instance.clockNumber;
 
-        clockNumber.color = color;
+        clockNumber.color = numberColor;
 
 
         var clockBoxObject = clockNumber.transform.parent;
 
         var clockBoxImage = clockBoxObject.GetComponent<Image>();
 
-        clockBoxImage.color = color;
+        clockBoxImage.color = boxColor;
+        clockBoxObject.transform.localScale = clockBoxScale;
 
 
         var clockImage = HUDManager.Instance.clockIcon;
 
-        clockImage.color = color;
+        clockImage.color = iconColor;
+
+
+        var shipLeaveIcon = HUDManager.Instance.shipLeavingEarlyIcon;
+
+        shipLeaveIcon.color = shipLeaveIconColor;
 
 
         if (spectatorClock == null || !spectatorClock) return;
 
-        spectatorClock.clockNumber.color = color;
-        spectatorClock.clockIcon.color = color;
+        spectatorClock.clockNumber.color = numberColor;
 
-        spectatorClock.clockBox.color = color;
+        spectatorClock.clockIcon.color = iconColor;
+
+
+        spectatorClock.clockBox.color = boxColor;
+        spectatorClock.clockBox.transform.localScale = clockBoxScale;
+
+        spectatorClock.shipLeaveIcon.color = shipLeaveIconColor;
     }
 }

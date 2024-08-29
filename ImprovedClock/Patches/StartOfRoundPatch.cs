@@ -13,5 +13,6 @@ public static class StartOfRoundPatch {
         }
 
         ImprovedClock.spectatorClock.SetClockVisible(false);
+        ImprovedClock.spectatorClock?.SetShipLeaveIconVisible(false);
     }
 }

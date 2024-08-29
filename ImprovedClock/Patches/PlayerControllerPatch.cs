@@ -61,5 +61,6 @@ public static class PlayerControllerPatch {
         ImprovedClock.Logger.LogDebug("Clock created!");
 
         ImprovedClock.spectatorClock.SetClockVisible(false);
+        ImprovedClock.spectatorClock?.SetShipLeaveIconVisible(false);
     }
 }

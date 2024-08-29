@@ -8,47 +8,113 @@ public static class ConfigManager {
     public static ConfigEntry<bool> enableRealtimeClock = null!;
 
     public static ConfigEntry<bool> showClockInShip = null!;
-    public static ConfigEntry<float> clockVisibilityInShip = null!;
+    public static ConfigEntry<int> clockVisibilityInShip = null!;
 
     public static ConfigEntry<bool> showClockInFacility = null!;
-    public static ConfigEntry<float> clockVisibilityInFacility = null!;
+    public static ConfigEntry<int> clockVisibilityInFacility = null!;
 
     public static ConfigEntry<bool> showClockInSpectator = null!;
-    public static ConfigEntry<float> clockVisibilityInSpectator = null!;
+    public static ConfigEntry<int> clockVisibilityInSpectator = null!;
 
-    public static ConfigEntry<float> clockColorRed = null!;
-    public static ConfigEntry<float> clockColorGreen = null!;
-    public static ConfigEntry<float> clockColorBlue = null!;
+    public static ConfigEntry<int> clockNumberColorRed = null!;
+    public static ConfigEntry<int> clockNumberColorGreen = null!;
+    public static ConfigEntry<int> clockNumberColorBlue = null!;
+
+    public static ConfigEntry<int> clockBoxColorRed = null!;
+    public static ConfigEntry<int> clockBoxColorGreen = null!;
+    public static ConfigEntry<int> clockBoxColorBlue = null!;
+
+    public static ConfigEntry<int> clockIconColorRed = null!;
+    public static ConfigEntry<int> clockIconColorGreen = null!;
+    public static ConfigEntry<int> clockIconColorBlue = null!;
+
+    public static ConfigEntry<int> clockShipLeaveIconColorRed = null!;
+    public static ConfigEntry<int> clockShipLeaveIconColorGreen = null!;
+    public static ConfigEntry<int> clockShipLeaveIconColorBlue = null!;
+
+
+    public static ConfigEntry<int> clockSizeMultiplier = null!;
 
     public static void Initialize(ConfigFile configFile) {
+        #region General
+
         enableNormalHumanBeingClock = configFile.Bind("General", "Enable 24 hour clock", true,
                                                       "If true, will make the clock display 24 hour time instead of 12 hour time.");
 
         enableRealtimeClock = configFile.Bind("General", "Enable realtime clock", true, "If true, will make the clock update instantly.");
 
+        #endregion General
+
+        #region Visibility
+
         showClockInShip = configFile.Bind("Visibility", "Show clock in ship", true, "If true, will show the click in the ship too.");
-        clockVisibilityInShip = configFile.Bind("Visibility", "Clock visibility in ship", 1F,
-                                                new ConfigDescription("The target alpha value to use for clock visibility in ship.",
-                                                                      new AcceptableValueRange<float>(0F, 1F)));
+        clockVisibilityInShip = configFile.Bind("Visibility", "Clock visibility in ship", 100,
+                                                new ConfigDescription("The visibility percentage to use for clock visibility in ship.",
+                                                                      new AcceptableValueRange<int>(0, 100)));
 
         showClockInFacility = configFile.Bind("Visibility", "Show clock in facility", false, "If true, will show the click in the facility too.");
-        clockVisibilityInFacility = configFile.Bind("Visibility", "Clock visibility in facility", 1F,
-                                                    new ConfigDescription("The target alpha value to use for clock visibility in facility.",
-                                                                          new AcceptableValueRange<float>(0F, 1F)));
+        clockVisibilityInFacility = configFile.Bind("Visibility", "Clock visibility in facility", 100,
+                                                    new ConfigDescription("The visibility percentage to use for clock visibility in facility.",
+                                                                          new AcceptableValueRange<int>(0, 100)));
 
         showClockInSpectator = configFile.Bind("Visibility", "Show clock in spectator", true, "If true, will show the click in the spectator too.");
-        clockVisibilityInSpectator = configFile.Bind("Visibility", "Clock visibility in spectator", 1F,
-                                                     new ConfigDescription("The target alpha value to use for clock visibility in spectator.",
-                                                                           new AcceptableValueRange<float>(0F, 1F)));
+        clockVisibilityInSpectator = configFile.Bind("Visibility", "Clock visibility in spectator", 100,
+                                                     new ConfigDescription("The visibility percentage to use for clock visibility in spectator.",
+                                                                           new AcceptableValueRange<int>(0, 100)));
 
-        clockColorRed = configFile.Bind("Customization", "Clock Color Red", 1F,
-                                        new ConfigDescription("Defines how much red is in the clock's color",
-                                                              new AcceptableValueRange<float>(0F, 1F)));
-        clockColorGreen = configFile.Bind("Customization", "Clock Color Green", 0.3F,
-                                          new ConfigDescription("Defines how much green is in the clock's color",
-                                                                new AcceptableValueRange<float>(0F, 1F)));
-        clockColorBlue = configFile.Bind("Customization", "Clock Color Blue", 0F,
-                                         new ConfigDescription("Defines how much blue is in the clock's color",
-                                                               new AcceptableValueRange<float>(0F, 1F)));
+        #endregion Visibility
+
+
+        clockSizeMultiplier = configFile.Bind("Clock Customization", "Clock Size Percentage", 100,
+                                              new ConfigDescription("A multiplier applied to the clock's size.",
+                                                                    new AcceptableValueRange<int>(50, 200)));
+
+
+        #region colors
+
+        clockNumberColorRed = configFile.Bind("Number Customization", "Color Red", 255,
+                                              new ConfigDescription("Defines how much red is in the clock numbers' color",
+                                                                    new AcceptableValueRange<int>(0, 255)));
+        clockNumberColorGreen = configFile.Bind("Number Customization", "Color Green", 76,
+                                                new ConfigDescription("Defines how much green is in the clock numbers' color",
+                                                                      new AcceptableValueRange<int>(0, 255)));
+        clockNumberColorBlue = configFile.Bind("Number Customization", "Color Blue", 0,
+                                               new ConfigDescription("Defines how much blue is in the clock numbers' color",
+                                                                     new AcceptableValueRange<int>(0, 255)));
+
+
+        clockBoxColorRed = configFile.Bind("Box Customization", "Color Red", 255,
+                                           new ConfigDescription("Defines how much red is in the clock box's color",
+                                                                 new AcceptableValueRange<int>(0, 255)));
+        clockBoxColorGreen = configFile.Bind("Box Customization", "Color Green", 76,
+                                             new ConfigDescription("Defines how much green is in the clock box's color",
+                                                                   new AcceptableValueRange<int>(0, 255)));
+        clockBoxColorBlue = configFile.Bind("Box Customization", "Color Blue", 0,
+                                            new ConfigDescription("Defines how much blue is in the clock box's color",
+                                                                  new AcceptableValueRange<int>(0, 255)));
+
+
+        clockIconColorRed = configFile.Bind("Icon Customization", "Color Red", 255,
+                                            new ConfigDescription("Defines how much red is in the clock icon's color",
+                                                                  new AcceptableValueRange<int>(0, 255)));
+        clockIconColorGreen = configFile.Bind("Icon Customization", "Color Green", 76,
+                                              new ConfigDescription("Defines how much green is in the clock icon's color",
+                                                                    new AcceptableValueRange<int>(0, 255)));
+        clockIconColorBlue = configFile.Bind("Icon Customization", "Color Blue", 0,
+                                             new ConfigDescription("Defines how much blue is in the clock icon's color",
+                                                                   new AcceptableValueRange<int>(0, 255)));
+
+
+        clockShipLeaveIconColorRed = configFile.Bind("Ship Leave Icon Customization", "Color Red", 255,
+                                                     new ConfigDescription("Defines how much red is in the clock ship leave icon's color",
+                                                                           new AcceptableValueRange<int>(0, 255)));
+        clockShipLeaveIconColorGreen = configFile.Bind("Ship Leave Icon Customization", "Color Green", 76,
+                                                   new ConfigDescription("Defines how much green is in the clock ship leave icon's color",
+                                                                         new AcceptableValueRange<int>(0, 255)));
+        clockShipLeaveIconColorBlue = configFile.Bind("Ship Leave Icon Customization", "Color Blue", 0,
+                                                  new ConfigDescription("Defines how much blue is in the clock ship leave icon's color",
+                                                                        new AcceptableValueRange<int>(0, 255)));
+
+        #endregion colors
     }
 }

@@ -12,7 +12,7 @@ namespace ImprovedClock.Patches;
 public static class HUDManagerPatch {
     [HarmonyPatch(nameof(HUDManager.OnEnable))]
     [HarmonyPostfix]
-    private static void SetClockColor() => ImprovedClock.SetClockColor();
+    private static void SetClockColor() => ImprovedClock.SetClockColorAndSize();
 
     [HarmonyPatch(nameof(HUDManager.SetClock))]
     [HarmonyPrefix]
@@ -96,9 +96,9 @@ public static class HUDManagerPatch {
     public static float GetTargetAlpha() {
         var playerControllerB = StartOfRound.Instance.localPlayerController;
 
-        if (playerControllerB.isInsideFactory) return ConfigManager.clockVisibilityInFacility.Value;
+        if (playerControllerB.isInsideFactory) return ConfigManager.clockVisibilityInFacility.Value / 100F;
 
-        return playerControllerB.isInHangarShipRoom? ConfigManager.clockVisibilityInShip.Value : 1F;
+        return playerControllerB.isInHangarShipRoom? ConfigManager.clockVisibilityInShip.Value / 100F : 1F;
     }
 
     [HarmonyPatch(nameof(HUDManager.RemoveSpectateUI))]
@@ -110,5 +110,6 @@ public static class HUDManagerPatch {
         }
 
         ImprovedClock.spectatorClock.SetClockVisible(false);
+        ImprovedClock.spectatorClock?.SetShipLeaveIconVisible(false);
     }
 }
