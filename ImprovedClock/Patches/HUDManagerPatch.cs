@@ -10,6 +10,8 @@ namespace ImprovedClock.Patches;
 
 [HarmonyPatch(typeof(HUDManager))]
 public static class HUDManagerPatch {
+    public static bool skipAlphaCheck;
+
     [HarmonyPatch(nameof(HUDManager.OnEnable))]
     [HarmonyPostfix]
     private static void SetClockColor() => ImprovedClock.SetClockColorAndSize();
@@ -51,9 +53,20 @@ public static class HUDManagerPatch {
     [HarmonyPatch(nameof(HUDManager.SetClockVisible))]
     [HarmonyPrefix]
     private static void ShowClockInShip(ref bool visible) {
-        if (visible) return;
-
         var localPlayer = StartOfRound.Instance.localPlayerController;
+
+        ImprovedClock.Logger.LogFatal($"inTerminal? {localPlayer.inTerminalMenu}");
+
+        if (localPlayer.inTerminalMenu) {
+            visible = false;
+            return;
+        }
+
+        if (visible) {
+            skipAlphaCheck = true;
+            return;
+        }
+
 
         if (!ConfigManager.showClockInShip.Value && localPlayer.isInHangarShipRoom) return;
 
@@ -94,6 +107,11 @@ public static class HUDManagerPatch {
     }
 
     public static float GetTargetAlpha() {
+        if (skipAlphaCheck) {
+            skipAlphaCheck = false;
+            return 1F;
+        }
+
         var playerControllerB = StartOfRound.Instance.localPlayerController;
 
         if (playerControllerB.isInsideFactory) return ConfigManager.clockVisibilityInFacility.Value / 100F;

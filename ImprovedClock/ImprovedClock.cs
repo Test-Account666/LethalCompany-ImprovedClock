@@ -65,7 +65,13 @@ public class ImprovedClock : BaseUnityPlugin {
 
         ConfigManager.clockSizeMultiplier.SettingChanged += (_, _) => SetClockColorAndSize();
 
-        ConfigManager.showClockInSpectator.SettingChanged += (_, _) => spectatorClock?.SetClockVisible(ConfigManager.showClockInSpectator.Value);
+        ConfigManager.showClockInSpectator.SettingChanged += (_, _) => {
+            var visible = ConfigManager.showClockInSpectator.Value
+                       && StartOfRound.Instance != null && StartOfRound.Instance.localPlayerController != null
+                       && StartOfRound.Instance.localPlayerController.isPlayerDead;
+
+            spectatorClock?.SetClockVisible(visible);
+        };
         ConfigManager.clockVisibilityInSpectator.SettingChanged += (_, _) => spectatorClock?.SetClockVisibility();
 
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");

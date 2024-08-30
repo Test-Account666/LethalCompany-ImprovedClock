@@ -18,12 +18,8 @@ public static class TimeOfDayPatch {
         TimeOfDay.Instance.changeHUDTimeInterval = 4F;
     }
 
-    [HarmonyPatch(nameof(TimeOfDay.SetShipLeaveEarlyServerRpc))]
-    [HarmonyPostfix]
-    private static void SetShipLeaveIconVisibilityServer() => ShipLeaving();
-
     [HarmonyPatch(nameof(TimeOfDay.SetShipLeaveEarlyClientRpc))]
-    [HarmonyPostfix]
+    [HarmonyPrefix]
     private static void SetShipLeaveIconVisibility() => ShipLeaving();
 
     [HarmonyPatch(nameof(TimeOfDay.TimeOfDayEvents))]
