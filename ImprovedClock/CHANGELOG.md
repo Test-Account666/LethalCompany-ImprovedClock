@@ -1,5 +1,9 @@
 # ImprovedClock
 
+## 1.1.2
+
+\* Ooopsie, left a debug message in there<br>
+
 ## 1.1.1
 
 \* Fixed Spectator Clock appearing when you toggle "Spectator Clock Visible" via LethalConfig<br>
