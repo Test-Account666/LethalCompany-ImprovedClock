@@ -1,5 +1,12 @@
 # ImprovedClock
 
+## 1.1.1
+
+\* Fixed Spectator Clock appearing when you toggle "Spectator Clock Visible" via LethalConfig<br>
+\* Fixed issue where the clock will use the ship alpha value on top of the ship<br>
+\* Fixed issue with ship leave icon appearing by just voting<br>
+\# Clock now disappears while using the terminal<br>
+
 ## 1.1.0
 
 \+ Added ship leave icon for spectator clock<br>
