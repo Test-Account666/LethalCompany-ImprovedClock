@@ -55,8 +55,6 @@ public static class HUDManagerPatch {
     private static void ShowClockInShip(ref bool visible) {
         var localPlayer = StartOfRound.Instance.localPlayerController;
 
-        ImprovedClock.Logger.LogFatal($"inTerminal? {localPlayer.inTerminalMenu}");
-
         if (localPlayer.inTerminalMenu) {
             visible = false;
             return;
