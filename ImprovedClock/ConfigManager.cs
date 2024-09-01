@@ -35,6 +35,8 @@ public static class ConfigManager {
 
     public static ConfigEntry<int> clockSizeMultiplier = null!;
 
+    public static ConfigEntry<bool> useAlternativeDangerIcon = null!;
+
     public static void Initialize(ConfigFile configFile) {
         #region General
 
@@ -68,6 +70,9 @@ public static class ConfigManager {
         clockSizeMultiplier = configFile.Bind("Clock Customization", "Clock Size Percentage", 100,
                                               new ConfigDescription("A multiplier applied to the clock's size.",
                                                                     new AcceptableValueRange<int>(50, 200)));
+
+        useAlternativeDangerIcon = configFile.Bind("Clock Customization", "Use Alternative Danger Icon", false,
+                                                   "If true, will use an alternative danger icon.");
 
 
         #region colors
@@ -109,11 +114,11 @@ public static class ConfigManager {
                                                      new ConfigDescription("Defines how much red is in the clock ship leave icon's color",
                                                                            new AcceptableValueRange<int>(0, 255)));
         clockShipLeaveIconColorGreen = configFile.Bind("Ship Leave Icon Customization", "Color Green", 76,
-                                                   new ConfigDescription("Defines how much green is in the clock ship leave icon's color",
-                                                                         new AcceptableValueRange<int>(0, 255)));
+                                                       new ConfigDescription("Defines how much green is in the clock ship leave icon's color",
+                                                                             new AcceptableValueRange<int>(0, 255)));
         clockShipLeaveIconColorBlue = configFile.Bind("Ship Leave Icon Customization", "Color Blue", 0,
-                                                  new ConfigDescription("Defines how much blue is in the clock ship leave icon's color",
-                                                                        new AcceptableValueRange<int>(0, 255)));
+                                                      new ConfigDescription("Defines how much blue is in the clock ship leave icon's color",
+                                                                            new AcceptableValueRange<int>(0, 255)));
 
         #endregion colors
     }

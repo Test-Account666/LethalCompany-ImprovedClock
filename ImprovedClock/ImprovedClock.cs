@@ -21,6 +21,10 @@ public class ImprovedClock : BaseUnityPlugin {
 
     public static GameObject spectatorClockPrefab = null!;
 
+    public static Sprite skullAlternativeSprite = null!;
+
+    public static Sprite skullSprite = null!;
+
     internal static void Patch() {
         Harmony ??= new(MyPluginInfo.PLUGIN_GUID);
 
@@ -74,6 +78,20 @@ public class ImprovedClock : BaseUnityPlugin {
         };
         ConfigManager.clockVisibilityInSpectator.SettingChanged += (_, _) => spectatorClock?.SetClockVisibility();
 
+        ConfigManager.useAlternativeDangerIcon.SettingChanged += (_, _) => {
+            if (HUDManager.Instance == null) return;
+
+            var clockIcons = HUDManager.Instance.clockIcons;
+
+            var alternative = ConfigManager.useAlternativeDangerIcon.Value;
+
+            clockIcons[^1] = alternative? skullAlternativeSprite : skullSprite;
+
+            HUDManager.Instance.clockIcons = clockIcons;
+
+            HUDManager.Instance.SetClockIcon(TimeOfDay.Instance.dayMode);
+        };
+
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
     }
 
@@ -87,7 +105,9 @@ public class ImprovedClock : BaseUnityPlugin {
 
         spectatorClockPrefab = assetBundle.LoadAsset<GameObject>("Assets/LethalCompany/Mods/ImprovedClock/SpectatorClock.prefab");
 
-        Object.DontDestroyOnLoad(spectatorClockPrefab);
+        DontDestroyOnLoad(spectatorClockPrefab);
+
+        skullAlternativeSprite = assetBundle.LoadAsset<Sprite>("Assets/LethalCompany/Mods/ImprovedClock/SkullAlternative.png");
     }
 
     internal static void Unpatch() {

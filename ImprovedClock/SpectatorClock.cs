@@ -14,7 +14,6 @@ public class SpectatorClock : MonoBehaviour {
 
     public UnityEngine.UI.Image shipLeaveIcon;
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
     private void Start() {
         SetClock();
         ImprovedClock.SetClockColorAndSize();
@@ -24,7 +23,7 @@ public class SpectatorClock : MonoBehaviour {
 
     public void SetClockVisibility() => canvasGroup.alpha = ConfigManager.clockVisibilityInSpectator.Value;
 
-    public void SetShipLeaveIconVisible(bool visible) => shipLeaveIcon.enabled = visible;
+    public void SetShipLeaveIconVisible(bool visible) => shipLeaveIcon.enabled = visible && canvasGroup.enabled;
 
     public void SetClock() {
         clockNumber.text = HUDManager.Instance.clockNumber.text;

@@ -14,7 +14,19 @@ public static class HUDManagerPatch {
 
     [HarmonyPatch(nameof(HUDManager.OnEnable))]
     [HarmonyPostfix]
-    private static void SetClockColor() => ImprovedClock.SetClockColorAndSize();
+    private static void SetClockColor() {
+        ImprovedClock.SetClockColorAndSize();
+
+        var clockIcons = HUDManager.Instance.clockIcons;
+
+        ImprovedClock.skullSprite = clockIcons[^1];
+
+        if (!ConfigManager.useAlternativeDangerIcon.Value) return;
+
+        clockIcons[^1] = ImprovedClock.skullAlternativeSprite;
+
+        HUDManager.Instance.clockIcons = clockIcons;
+    }
 
     [HarmonyPatch(nameof(HUDManager.SetClock))]
     [HarmonyPrefix]
