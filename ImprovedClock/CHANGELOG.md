@@ -1,5 +1,9 @@
 # ImprovedClock
 
+## 1.2.0
+
+\+ Added alternative danger icon<br>
+
 ## 1.1.2
 
 \* Ooopsie, left a debug message in there<br>
