@@ -35,11 +35,9 @@ public static class PlayerControllerPatch {
     public static IEnumerator WaitAndCreateSpectatorClock(PlayerControllerB playerControllerB) {
         yield return new WaitUntil(() => StartOfRound.Instance != null && StartOfRound.Instance);
 
-        var localPlayer = StartOfRound.Instance.localPlayerController;
+        yield return new WaitUntil(() => StartOfRound.Instance.localPlayerController != null && StartOfRound.Instance.localPlayerController);
 
-        yield return new WaitUntil(() => localPlayer != null && localPlayer);
-
-        if (localPlayer != playerControllerB) {
+        if (StartOfRound.Instance.localPlayerController != playerControllerB) {
             ImprovedClock.Logger.LogDebug("Not local player!");
             yield break;
         }
