@@ -1,5 +1,11 @@
 # ImprovedClock
 
+## 1.2.1
+
+\* Fixed Spectator Clock for clients<br>
+\* Fixed LobbyCompatibility marking the mod incompatible with vanilla lobbies<br>
+\# Changed mod icon<br>
+
 ## 1.2.0
 
 \+ Added alternative danger icon<br>
