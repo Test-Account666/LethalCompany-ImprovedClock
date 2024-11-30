@@ -64,7 +64,14 @@ public static class HUDManagerPatch {
 
     [HarmonyPatch(nameof(HUDManager.SetClockVisible))]
     [HarmonyPrefix]
-    private static void ShowClockInShip(ref bool visible) {
+    private static void SetClockVisible(ref bool visible) {
+        var currentLevel = StartOfRound.Instance.currentLevel;
+
+        if (ImprovedClock.ClockDisabledLevels.Contains(currentLevel)) {
+            visible = false;
+            return;
+        }
+
         var localPlayer = StartOfRound.Instance.localPlayerController;
 
         if (localPlayer.inTerminalMenu) {

@@ -1,9 +1,13 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 using ImprovedClock.Dependencies;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 using Debug = System.Diagnostics.Debug;
@@ -24,6 +28,9 @@ public class ImprovedClock : BaseUnityPlugin {
     public static Sprite skullAlternativeSprite = null!;
 
     public static Sprite skullSprite = null!;
+
+    public static readonly HashSet<SelectableLevel> ClockDisabledLevels = [
+    ];
 
     internal static void Patch() {
         Harmony ??= new(MyPluginInfo.PLUGIN_GUID);
@@ -92,7 +99,41 @@ public class ImprovedClock : BaseUnityPlugin {
             HUDManager.Instance.SetClockIcon(TimeOfDay.Instance.dayMode);
         };
 
+        Coroutine? fetchDisabledMoonsRoutine = null;
+
+        fetchDisabledMoonsRoutine = StartCoroutine(WaitAndFetchDisabledMoons());
+
+        ConfigManager.disabledClockMoons.SettingChanged += (_, _) => {
+            if (fetchDisabledMoonsRoutine != null) {
+                StopCoroutine(fetchDisabledMoonsRoutine);
+                fetchDisabledMoonsRoutine = null;
+            }
+
+            fetchDisabledMoonsRoutine = StartCoroutine(WaitAndFetchDisabledMoons());
+        };
+
         Logger.LogInfo($"{MyPluginInfo.PLUGIN_GUID} v{MyPluginInfo.PLUGIN_VERSION} has loaded!");
+    }
+
+    private static IEnumerator WaitAndFetchDisabledMoons() {
+        ClockDisabledLevels.Clear();
+
+        var disabledMoonsString = ConfigManager.disabledClockMoons.Value;
+
+        if (string.IsNullOrWhiteSpace(disabledMoonsString)) yield break;
+
+        var disabledMoons = disabledMoonsString.Replace(", ", ",").Split(',').ToList();
+
+        if (disabledMoons.Count <= 0) yield break;
+
+        yield return new WaitUntil(() => StartOfRound.Instance != null && StartOfRound.Instance);
+        yield return new WaitUntil(() => StartOfRound.Instance.localPlayerController != null);
+
+        foreach (var selectableLevel in StartOfRound.Instance.levels) {
+            var levelName = selectableLevel.PlanetName;
+            foreach (var disabledMoon in disabledMoons.Where(disabledMoon => levelName.ToLower().Contains(disabledMoon.ToLower())))
+                ClockDisabledLevels.Add(selectableLevel);
+        }
     }
 
     private static void LoadAssetBundle() {

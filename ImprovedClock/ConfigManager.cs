@@ -37,6 +37,8 @@ public static class ConfigManager {
 
     public static ConfigEntry<bool> useAlternativeDangerIcon = null!;
 
+    public static ConfigEntry<string> disabledClockMoons = null!;
+
     public static void Initialize(ConfigFile configFile) {
         #region General
 
@@ -121,5 +123,13 @@ public static class ConfigManager {
                                                                             new AcceptableValueRange<int>(0, 255)));
 
         #endregion colors
+
+        #region Special Cases
+
+        disabledClockMoons = configFile.Bind("Special Cases", "Disabled Clock Moons", "Example1, Example2",
+                                             "A comma-separated list of moons where the clock is disabled (Does *NOT* affect spectator clock.) "
+                                           + "Uses `contains`, so only names are required. For example, `Roid` will disable clock on Asteroid-13 and Asteroid-14.");
+
+        #endregion Special Cases
     }
 }
