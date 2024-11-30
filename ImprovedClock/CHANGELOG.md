@@ -1,5 +1,9 @@
 # ImprovedClock
 
+## 1.3.0
+
+\+ Added config option to hide clock on specific moons (Does *NOT* affect spectator clock!)<br>
+
 ## 1.2.1
 
 \* Fixed Spectator Clock for clients<br>
